@@ -54,7 +54,7 @@ export default {
         id: Date.now(),
         title: '',
         desc: '',
-        priority: 'normal',
+        priority: 'medium',
         category: '',
         dueAt: (new Date()).toISOString().split('T')[0],
         isComplete: false
