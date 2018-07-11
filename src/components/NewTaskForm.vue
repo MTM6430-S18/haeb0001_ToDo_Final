@@ -11,7 +11,7 @@
     <label>
       <select v-model="newTask.priority">
         <option value="high">High</option>
-        <option value="normal" selected>Normal</option>
+        <option value="medium" selected>Medium</option>
         <option value="low">Low</option>
       </select>
     </label>

@@ -88,7 +88,7 @@ export default {
     ],
     priorityOptions: [
       {id: 'high', name: 'High'},
-      {id: 'normal', name: 'Normal'},
+      {id: 'medium', name: 'Medium'},
       {id: 'low', name: 'Low'}
     ],
     selectedPriority: '',
