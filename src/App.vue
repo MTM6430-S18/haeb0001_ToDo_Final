@@ -1,11 +1,23 @@
 <template>
   <div id="app">
     <the-header v-once />
-    <new-task-form @addTask="addTask" />
+
+    <div class="sortOptions">
+      <span @click="sortAscending = !sortAscending">Sort Date <img src="@/assets/arrow.png" class="icon" /></span>
+      <select name="priority-filter" id="priority-filter" v-model="selectedPriority">
+      <option value="">Priority</option>
+        <option v-for="option in priorityOptions" :value="option.id" :key="option.id">{{ option.name}}</option>
+      </select>
+      <select name="category-filter" id="category-filter" v-model="selectedCategory">
+      <option value="">Category</option>
+        <option v-for="option in categoryOptions" :value="option.id" :key="option.id">{{ option.name}}</option>
+      </select>
+    </div>
 
     <div id="nav" class="tabs">
       <router-link to="/active">Active Tasks</router-link>
       <router-link to="/completed">Completed Tasks</router-link>
+      <router-link to="/addTask">+ Task</router-link>
     </div>
 
     <transition-group name="tab" :duration="{ enter: 600, leave: 300 }" appear>
@@ -14,14 +26,21 @@
         :class="{ 'overdue': !!overdueTasks.length }"
         name="overdue"
         key="overdue"
+        :selectedPriority="selectedPriority"
+        :selectedCategory="selectedCategory"
+        :sortAscending="sortAscending"
         @updateTask="updateTask"
         @toggleDone="toggleDone"
         @deleteTask="deleteTask"
       />
       <router-view
         :tasks="upcomingTasks"
+        class="upcoming"
         name="upcoming"
         key="upcoming"
+        :selectedPriority="selectedPriority"
+        :selectedCategory="selectedCategory"
+        :sortAscending="sortAscending"
         @updateTask="updateTask"
         @toggleDone="toggleDone"
         @deleteTask="deleteTask"
@@ -32,11 +51,20 @@
         :class="{ 'completed': !!completedTasks.length }"
         name="completed"
         key="completed"
+        :selectedPriority="selectedPriority"
+        :selectedCategory="selectedCategory"
+        :sortAscending="sortAscending"
         @updateTask="updateTask"
         @toggleDone="toggleDone"
         @deleteTask="deleteTask"
       />
+
+      <router-view
+      key="newTask"
+      @addTask="addTask" @updateTask="updateTask"/>
+
     </transition-group>
+
   </div>
 </template>
 
@@ -57,7 +85,21 @@ export default {
     newTask: {},
     tasks: [
       // We are now overriding these in the created() event method
-    ]
+    ],
+    priorityOptions: [
+      {id: 'high', name: 'High'},
+      {id: 'normal', name: 'Normal'},
+      {id: 'low', name: 'Low'}
+    ],
+    selectedPriority: '',
+    categoryOptions: [
+      {id: 'Homework', name: 'Homework'},
+      {id: 'Chores', name: 'Chores'},
+      {id: 'Family', name: 'Family'},
+      {id: 'Work', name: 'Work'}
+    ],
+    selectedCategory: '',
+    sortAscending: true
   }),
   computed: {
     activeTasks () {
@@ -130,15 +172,22 @@ export default {
 
 .task-list {
   margin: 1rem 0;
+  &.upcoming{
+    > div{
+      box-shadow: 0px 0px 1px #DEF1FF;
+    }
+  }
   &.completed {
-    // border-top: 1px solid hsl(153, 47%, 49%);
-    background: hsl(153, 30%, 98.5%);
-    color: hsl(153, 16%, 40%);
+    background: #F8FBFF;
+    > div{
+      box-shadow: 0px 0px 1px #B0D0FF;
+    }
   }
   &.overdue {
     border-bottom: 1px solid hsl(348, 83%, 47%);
     background: hsl(348, 50%, 98.5%);
     color: hsl(348, 20%, 40%);
+    box-shadow: 0px 0px 1px #FF5555;
   }
 }
 
@@ -159,8 +208,8 @@ export default {
     transition: all 0.6s ease-in-out;
 
     &.router-link-exact-active {
-      border-bottom-color: #42b983;
-      color: #42b983;
+      border-bottom-color: #239CCC;
+      color: #239CCC;
     }
   }
 }
@@ -179,5 +228,22 @@ export default {
 }
 .tab-leave-active {
   transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.sortOptions{
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: .9rem;
+  & > select{
+    font-size: .9rem;
+    width: 100px;
+  }
+}
+body{
+  max-width: 800px;
+  margin: 0 auto;
 }
 </style>

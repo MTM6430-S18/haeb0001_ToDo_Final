@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import TaskList from '@/components/TaskList.vue'
+import addTask from '@/components/NewTaskForm.vue'
 
 Vue.use(Router)
 
@@ -20,6 +21,11 @@ export default new Router({
     components: {
       completed: TaskList
     }
+  },
+  {
+    path: '/addTask',
+    name: 'addTask',
+    component: addTask
   },
   {
     path: '*',

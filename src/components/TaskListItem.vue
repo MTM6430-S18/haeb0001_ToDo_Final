@@ -1,10 +1,29 @@
 <template>
   <div v-if="isEditing" class="task-list-item is-editing" @keyup.esc="cancel">
-    <font-awesome-icon :icon="statusIcon" @click="$emit('toggleDone', task)" />
     <form @submit.prevent="save">
       <label>
         Title
-        <input v-focus v-model.trim="editTask.title" type="text" />
+        <input v-focus v-model.trim="editTask.title" type="text" required/>
+      </label>
+      <label>
+        Description
+        <input v-model.trim="editTask.desc" type="text">
+      </label>
+      <label>
+        <select v-model="editTask.priority">
+          <option value="high">High</option>
+          <option value="normal" selected>Normal</option>
+          <option value="low">Low</option>
+        </select>
+      </label>
+      <label>
+        <select v-model="editTask.category">
+          <option value="">None</option>
+          <option value="Homework">Homework</option>
+          <option value="Work">Work</option>
+          <option value="Chores">Chores</option>
+          <option value="Family">Family</option>
+        </select>
       </label>
       <label>
         Due at
@@ -13,15 +32,18 @@
       <span class="action-buttons">
         <button class="button isOutline" type="button" @click="cancel">cancel</button>
         <button class="button" type="submit">save</button>
+        <font-awesome-icon :icon="deleteIcon" @click="$emit('deleteTask', task)" />
       </span>
     </form>
-    <font-awesome-icon :icon="deleteIcon" @click="$emit('deleteTask', task)" />
   </div>
-  <div v-else class="task-list-item" >
-    <font-awesome-icon :icon="statusIcon" @click="$emit('toggleDone', task)" />
-    <span @click="edit">{{ task.title }}</span>
-    <span @click="edit">{{ task.dueAt }}</span>
-    <font-awesome-icon :icon="deleteIcon" @click="$emit('deleteTask', task)" />
+  <div v-else class="task-list-item taskcontain" >
+    <div class="title">{{ task.title }}</div>
+    <div class="complete"><font-awesome-icon :icon="statusIcon" @click="$emit('toggleDone', task)" /></div>
+    <div class="desc">{{ task.desc }}</div>
+    <div class="date">{{ task.dueAt }}</div>
+    <div class="category">{{ task.category }}</div>
+    <div class="edit"  @click="edit"><img class="icon" src="../assets/edit.png"/></div>
+    <div class="priority">{{ task.priority }}</div>
   </div>
 </template>
 
@@ -71,13 +93,52 @@ export default {
 
 <style lang="scss">
 .task-list-item {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  grid-gap: 1rem;
   align-items: center;
   margin: 0.5rem 0;
   padding: 0.5rem;
   transition: all 0.4s;
+}
+
+.taskcontain {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 10px;
+  padding: 10px;
+  color: black;
+}
+
+.title {
+  grid-column: 2/7;
+  grid-row: 1;
+  font-weight: 800;
+}
+.complete {
+  grid-column: 1;
+  grid-row: 1/4;
+}
+.desc {
+  grid-column: 2/8;
+  grid-row: 2;
+}
+.date {
+  grid-column: 4/7;
+  grid-row: 3;
+  color: #999999;
+}
+.category {
+  grid-column: 2/4;
+  grid-row: 3;
+  color: #999999;
+}
+.edit {
+  text-align: right;
+  grid-column: 7;
+  grid-row: 1;
+}
+.priority{
+  grid-column: 7;
+  grid-row: 3;
+  color: #999999;
 }
 
 .is-editing {
@@ -100,7 +161,7 @@ export default {
   }
 
   input {
-    background: hsl(0, 0%, 97%);
+    background: #F8FBFF;
     border: 1px solid hsl(0, 0%, 93%);
     font-size: 1.1rem;
     padding: 0.4em;
@@ -147,4 +208,9 @@ export default {
 .edit-leave-active {
   position: absolute;
 }
+.icon{
+  width: 15px;
+  height: 15px;
+}
+
 </style>

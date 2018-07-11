@@ -2,11 +2,27 @@
   <form class="new-task-form" @submit.prevent="addTask">
     <label>
       Title
-      <input v-model.trim="newTask.title" type="text">
+      <input v-model.trim="newTask.title" type="text" required>
     </label>
     <label>
       Description
       <input v-model.trim="newTask.desc" type="text">
+    </label>
+    <label>
+      <select v-model="newTask.priority">
+        <option value="high">High</option>
+        <option value="normal" selected>Normal</option>
+        <option value="low">Low</option>
+      </select>
+    </label>
+    <label>
+      <select v-model="newTask.category">
+        <option value="">None</option>
+        <option value="Homework">Homework</option>
+        <option value="Work">Work</option>
+        <option value="Chores">Chores</option>
+        <option value="Family">Family</option>
+      </select>
     </label>
     <label>
       Due At
@@ -30,6 +46,7 @@ export default {
     addTask () {
       this.$emit('addTask', this.newTask)
       this.resetNewTask()
+      this.$router.push('/active')
     },
 
     resetNewTask () {
@@ -38,6 +55,7 @@ export default {
         title: '',
         desc: '',
         priority: 'normal',
+        category: '',
         dueAt: (new Date()).toISOString().split('T')[0],
         isComplete: false
       }
@@ -57,7 +75,7 @@ export default {
   }
 
   input {
-    background: hsl(0, 0%, 97%);
+    background: #F8FBFF;
     border: 1px solid hsl(0, 0%, 93%);
     font-size: 1.1rem;
     padding: 0.4em;
@@ -65,8 +83,8 @@ export default {
   }
 
   button {
-    background: hsl(197, 90%, 43%);
-    border: 1px solid hsl(197, 90%, 48%);
+    background: #239CCC;
+    border: 1px solid #239CCC;
     border-radius: 0.25rem;
     padding: 0.5rem 0.5rem;
     color: hsl(0, 0%, 99%);
@@ -80,9 +98,16 @@ export default {
 
     &:active {
       box-shadow: none;
-      background: hsl(197, 90%, 33%);
-      border: 1px solid hsl(197, 90%, 38%);
+      background: #239CCC;
+      border: 1px solid #239CCC;
     }
+  }
+  input:focus, select:focus {
+    outline: 1px solid #239CCC;
+  }
+
+  select{
+    font-size: 1rem;
   }
 }
 </style>

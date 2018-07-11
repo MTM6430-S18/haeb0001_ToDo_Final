@@ -1,7 +1,7 @@
 <template>
   <header class="the-header">
     <h1 class="app-title">
-      <img class="logo" src="@/assets/logo.png" alt="V">ue Todos
+      <img class="logo" src="@/assets/logo.png" alt="V">ue Todo
     </h1>
     <p class="current-date">{{ (new Date()).toDateString() }}</p>
   </header>
