@@ -6,22 +6,23 @@
     </label>
     <label>
       Description
-      <input v-model.trim="newTask.desc" type="text">
+      <input v-model.trim="newTask.description" type="text">
     </label>
     <label>
+      <p>Set a priority:</p>
       <select v-model="newTask.priority">
-        <option value="high">High</option>
-        <option value="medium" selected>Medium</option>
-        <option value="low">Low</option>
+        <option value="1">Low</option>
+        <option value="2" selected>Medium</option>
+        <option value="3">High</option>
       </select>
     </label>
     <label>
+      <p>Select a category:</p>
       <select v-model="newTask.category">
-        <option value="">None</option>
-        <option value="Homework">Homework</option>
-        <option value="Work">Work</option>
-        <option value="Chores">Chores</option>
-        <option value="Family">Family</option>
+        <option value="0" selected>None</option>
+        <option value="1">Home</option>
+        <option value="2">School</option>
+        <option value="3">Work</option>
       </select>
     </label>
     <label>
@@ -51,11 +52,10 @@ export default {
 
     resetNewTask () {
       this.newTask = {
-        id: Date.now(),
         title: '',
-        desc: '',
-        priority: 'medium',
-        category: '',
+        description: '',
+        priority: 2,
+        category: 0,
         dueAt: (new Date()).toISOString().split('T')[0],
         isComplete: false
       }
@@ -108,6 +108,11 @@ export default {
 
   select{
     font-size: 1rem;
+  }
+
+  p{
+    margin-top: 0;
+    margin-bottom: 3px;
   }
 }
 </style>

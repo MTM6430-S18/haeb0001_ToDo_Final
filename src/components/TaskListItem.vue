@@ -7,22 +7,23 @@
       </label>
       <label>
         Description
-        <input v-model.trim="editTask.desc" type="text">
+        <input v-model.trim="editTask.description" type="text">
       </label>
       <label>
-        <select v-model="editTask.priority">
-          <option value="high">High</option>
-          <option value="normal" selected>Normal</option>
-          <option value="low">Low</option>
+        <p>Set a priority:</p>
+        <select v-model="editTask.priority.id">
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
         </select>
       </label>
       <label>
-        <select v-model="editTask.category">
-          <option value="">None</option>
-          <option value="Homework">Homework</option>
-          <option value="Work">Work</option>
-          <option value="Chores">Chores</option>
-          <option value="Family">Family</option>
+        <p>Select a category:</p>
+        <select v-model="editTask.category.id">
+          <option value="5">None</option>
+          <option value="1">Home</option>
+          <option value="2">School</option>
+          <option value="3">Work</option>
         </select>
       </label>
       <label>
@@ -32,18 +33,17 @@
       <span class="action-buttons">
         <button class="button isOutline" type="button" @click="cancel">cancel</button>
         <button class="button" type="submit">save</button>
-        <font-awesome-icon :icon="deleteIcon" @click="$emit('deleteTask', task)" />
       </span>
     </form>
   </div>
   <div v-else class="task-list-item taskcontain" >
     <div class="title">{{ task.title }}</div>
     <div class="complete"><font-awesome-icon :icon="statusIcon" @click="$emit('toggleDone', task)" /></div>
-    <div class="desc">{{ task.desc }}</div>
-    <div class="date">{{ task.dueAt }}</div>
-    <div class="category">{{ task.category }}</div>
-    <div class="edit"  @click="edit"><img class="icon" src="../assets/edit.png"/></div>
-    <div class="priority">{{ task.priority }}</div>
+    <div class="desc">{{ task.description }}</div>
+    <div class="date">{{ task.dueAt.split(' ')[0] }}</div>
+    <div class="category">{{ categoryOutput }}</div>
+    <div class="edit"  @click="edit"><img class="icon" src="../assets/edit.png"/> &nbsp;<font-awesome-icon :icon="deleteIcon" @click="$emit('deleteTask', task)" /></div>
+    <div class="priority">{{ task.priority.name }}</div>
   </div>
 </template>
 
@@ -68,6 +68,12 @@ export default {
     editTask: {}
   }),
   computed: {
+    // categoryOutput allows us to not output the name of any null items
+    categoryOutput () {
+      if (this.task.category) {
+        return this.task.category.name
+      }
+    },
     statusIcon () {
       return this.task.isComplete ? faCheckCircle : faCircle
     },
@@ -81,9 +87,18 @@ export default {
     },
     edit () {
       this.editTask = Object.assign({}, this.task)
+      if (this.editTask.category) {
+        // if this task does have a category, proceed as normal
+      } else {
+        // if the task id is null, give it an object with an ID so it does not throw an error
+        this.editTask.category = {id: 5}
+      }
+      this.editTask.dueAt = this.editTask.dueAt.split(' ')[0]
       this.isEditing = true
     },
     save () {
+      // following line resets time to be at the end of the day so the task is not late until the day is over
+      this.editTask.dueAt = this.editTask.dueAt + ' 23:59:59'
       this.$emit('updateTask', this.editTask)
       this.isEditing = false
     }
@@ -211,6 +226,11 @@ export default {
 .icon{
   width: 15px;
   height: 15px;
+}
+
+p{
+  margin-top: 0;
+  margin-bottom: 3px;
 }
 
 </style>

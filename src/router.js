@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import TaskList from '@/components/TaskList.vue'
 import addTask from '@/components/NewTaskForm.vue'
+import LoginForm from '@/components/loginForm.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,12 @@ export default new Router({
   {
     path: '*',
     redirect: '/active'
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginForm
   }
+
   ]
 })

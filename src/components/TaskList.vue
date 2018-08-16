@@ -24,13 +24,12 @@ export default {
     filteredPriorityTasks () {
       return (!this.selectedPriority)
         ? this.tasks
-        : this.tasks.filter(task => task.priority === this.selectedPriority)
+        : this.tasks.filter(task => task.priority.id === this.selectedPriority)
     },
     filteredCategoryTasks () {
-      console.log(this.selectedCategory)
       return (this.selectedCategory === '')
         ? this.tasks
-        : this.tasks.filter(task => task.category === this.selectedCategory)
+        : this.tasks.filter(task => task.category && task.category.id === this.selectedCategory)
     },
     filteredTasks () {
       const combined = [
